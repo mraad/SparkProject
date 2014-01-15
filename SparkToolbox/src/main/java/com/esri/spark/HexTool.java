@@ -22,6 +22,8 @@ import com.esri.arcgis.interop.AutomationException;
 import com.esri.arcgis.system.Array;
 import com.esri.arcgis.system.Cleaner;
 import com.esri.arcgis.system.IArray;
+import com.esri.arcgis.system.IStepProgressor;
+import com.esri.arcgis.system.ITrackCancel;
 
 import java.io.IOException;
 
@@ -51,10 +53,20 @@ public final class HexTool extends AbstractTool
     @Override
     protected void doExecute(
             final IArray parameters,
-            final IGPMessages messages,
-            final IGPEnvironmentManager environmentManager
+            final ITrackCancel trackCancel,
+            final IGPEnvironmentManager environmentManager,
+            final IGPMessages messages
     ) throws Exception
     {
+        if (trackCancel.getProgressor() instanceof IStepProgressor)
+        {
+            final IStepProgressor stepProgressor = (IStepProgressor) trackCancel.getProgressor();
+            stepProgressor.setMinRange(0);
+            stepProgressor.setMaxRange(100);
+            stepProgressor.setStepValue(1);
+            stepProgressor.show();
+        }
+
         final IGPDouble gridValue = (IGPDouble) gpUtilities.unpackGPValue(parameters.getElement(0));
         final IGPValue outValue = gpUtilities.unpackGPValue(parameters.getElement(1));
 
@@ -87,6 +99,10 @@ public final class HexTool extends AbstractTool
                     int row = 0;
                     for (double y = yMin; y <= yMax; y += hex.v)
                     {
+                        if (trackCancel.esri_continue() == false)
+                        {
+                            break;
+                        }
                         final double ofs = (row++ & 1) == 0 ? 0.0 : hex.w2;
                         for (double x = xMin + ofs; x <= xMax; x += hex.w)
                         {

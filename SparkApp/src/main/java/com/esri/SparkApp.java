@@ -10,7 +10,6 @@ import org.apache.commons.lang.mutable.MutableInt;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.TextInputFormat;
-import org.apache.spark.SparkFiles;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.broadcast.Broadcast;
 import org.geotools.data.DataStore;
@@ -26,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,32 +43,27 @@ public final class SparkApp
     public static void main(final String[] args) throws IOException
     {
         final SparkApp sparkApp = new SparkApp();
-        final File file = new File("/tmp/hex.shp");
-        final String shapefile = file.toURI().toURL().toString();
+        final File shapefile = new File("/tmp/hex.shp");
         final Properties properties = new Properties();
         final List<Tuple2<Integer, Integer>> list = sparkApp.run(
                 properties,
-                shapefile,
+                shapefile.toURI().toURL(),
                 "/user/cloudera/zip.txt");
         System.out.println(list);
     }
 
     public List<Tuple2<Integer, Integer>> run(
             final Properties properties,
-            final String polygonFile,
-            final String hadoopFile) throws IOException
+            final URL polygonURL,
+            final String hadoopPath) throws IOException
     {
         final List<Tuple2<Integer, Integer>> collect;
         final JavaSparkContext sc = getJavaSparkContext(properties);
         try
         {
-            sc.addFile(polygonFile);
-            sc.addFile(polygonFile.replace(".shp", ".shx"));
-            sc.addFile(polygonFile.replace(".shp", ".dbf"));
-            final String polygonName = toPolygonName(polygonFile);
-            final Broadcast<SpatialIndex> spatialIndexBroadcast = broadcastSpatialIndex(sc, polygonName);
+            final Broadcast<SpatialIndex> spatialIndexBroadcast = broadcastSpatialIndex(sc, polygonURL);
             collect = sc.hadoopFile(
-                    hadoopFile,
+                    hadoopPath,
                     TextInputFormat.class,
                     LongWritable.class,
                     Text.class).
@@ -83,21 +78,14 @@ public final class SparkApp
         return collect;
     }
 
-    private String toPolygonName(final String polygonFile)
-    {
-        final String[] tokens = polygonFile.split("/");
-        return tokens[tokens.length - 1];
-    }
-
     private Broadcast<SpatialIndex> broadcastSpatialIndex(
             final JavaSparkContext sc,
-            final String filename) throws IOException
+            final URL shapefileURL) throws IOException
     {
         final SpatialIndex spatialIndex = new STRtree();
 
-        final File file = new File(SparkFiles.get(filename));
         final Map<String, Serializable> params = new HashMap<String, Serializable>();
-        params.put("url", file.toURI().toURL());
+        params.put("url", shapefileURL);
         final DataStore dataStore = DataStoreFinder.getDataStore(params);
         try
         {

@@ -98,7 +98,7 @@ public abstract class AbstractTool extends BaseGeoprocessingTool
         {
             Thread.currentThread().setContextClassLoader(ClassLoader.getSystemClassLoader());
 
-            doExecute(parameters, messages, environmentManager);
+            doExecute(parameters, trackCancel, environmentManager, messages);
         }
         catch (Throwable t)
         {
@@ -421,7 +421,8 @@ public abstract class AbstractTool extends BaseGeoprocessingTool
 
     protected abstract void doExecute(
             final IArray parameters,
-            final IGPMessages messages,
-            final IGPEnvironmentManager environmentManager) throws Throwable;
+            final ITrackCancel trackCancel,
+            final IGPEnvironmentManager environmentManager,
+            final IGPMessages messages) throws Throwable;
 
 }

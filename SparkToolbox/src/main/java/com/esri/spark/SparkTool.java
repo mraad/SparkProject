@@ -18,6 +18,7 @@ import com.esri.arcgis.geoprocessing.IGPFunctionFactory;
 import com.esri.arcgis.interop.AutomationException;
 import com.esri.arcgis.system.Array;
 import com.esri.arcgis.system.IArray;
+import com.esri.arcgis.system.ITrackCancel;
 import scala.Tuple2;
 
 import java.io.File;
@@ -49,8 +50,9 @@ public final class SparkTool extends AbstractTool
     @Override
     protected void doExecute(
             final IArray parameters,
-            final IGPMessages messages,
-            final IGPEnvironmentManager environmentManager
+            final ITrackCancel trackCancel,
+            final IGPEnvironmentManager environmentManager,
+            final IGPMessages messages
     ) throws Exception
     {
         final IGPValue sparkValue = gpUtilities.unpackGPValue(parameters.getElement(0));
@@ -59,11 +61,10 @@ public final class SparkTool extends AbstractTool
         final IGPValue tableValue = gpUtilities.unpackGPValue(parameters.getElement(3));
 
         final File file = new File(shapeValue.getAsText());
-        final String url = file.toURI().toURL().toString();
 
         final Properties properties = readSparkProperties(sparkValue);
         final SparkApp sparkApp = new SparkApp();
-        final List<Tuple2<Integer, Integer>> list = sparkApp.run(properties, url, hadoopValue.getAsText());
+        final List<Tuple2<Integer, Integer>> list = sparkApp.run(properties, file.toURI().toURL(), hadoopValue.getAsText());
         createTable(list, tableValue, messages, environmentManager);
     }
 
