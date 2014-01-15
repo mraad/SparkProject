@@ -52,5 +52,15 @@ in such that I can reference it in my project pom.xml as:
 
 *Note to self - Dive into Scala and SBT !!*
 
-## Get Started
+## Getting Started
 I highly recommend that you download the [Cloudera Quick Start VM](http://www.cloudera.com/content/cloudera-content/cloudera-docs/DemoVMs/Cloudera-QuickStart-VM/cloudera_quickstart_vm.html). Once started, for this project you only need [ZooKeeper](http://zookeeper.apache.org/) and HDFS up and running.
+
+Copy the zip.zip file from the data folder into the VM. Unzip the file and put the zip.txt file into hadoop.
+
+```
+$ hadoop fs -put zip.txt zip.txt
+```
+
+BTW - this file contains the centroid location all the zipcodes in the United States.
+
+Finally, copy into the VM the Spark distribution, and start the Spark master and slave. Check out the [standalone mode documentation](http://spark.incubator.apache.org/docs/latest/spark-standalone.html) for more details.

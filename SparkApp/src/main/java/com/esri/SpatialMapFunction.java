@@ -17,6 +17,8 @@ import java.util.List;
  */
 final class SpatialMapFunction extends PairFlatMapFunction<Tuple2<LongWritable, Text>, Integer, Integer>
 {
+    private static final long serialVersionUID = -5839271916031412331L;
+
     private final static double EPS = 0.0000001;
     private final SpatialIndex m_spatialIndex;
     private final Coordinate m_coordinate = new Coordinate();

@@ -117,6 +117,35 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <!-- mvn exec:java -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.2.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <mainClass>com.esri.SparkApp</mainClass>
+                    <arguments>
+                        <argument>-Xms1g</argument>
+                        <argument>-Xmx2g</argument>
+                        <argument>-Djava.security.krb5.realm=OX.AC.UK</argument>
+                        <argument>-Djava.security.krb5.kdc=kdc0.ox.ac.uk:kdc1.ox.ac.uk</argument>
+                        <argument>-server</argument>
+                    </arguments>
+                    <systemProperties>
+                        <systemProperty>
+                            <key>myproperty</key>
+                            <value>myvalue</value>
+                        </systemProperty>
+                    </systemProperties>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

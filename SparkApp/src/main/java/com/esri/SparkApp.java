@@ -35,6 +35,8 @@ public final class SparkApp
         implements Serializable
 {
 
+    private static final long serialVersionUID = -2020889835686922285L;
+
     public static final String SPARK_MASTER = "spark.master";
     public static final String SPARK_HOME = "spark.home";
 

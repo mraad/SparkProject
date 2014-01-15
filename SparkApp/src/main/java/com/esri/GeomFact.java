@@ -11,6 +11,8 @@ import java.io.Serializable;
  */
 public final class GeomFact implements Serializable
 {
+    private static final long serialVersionUID = -992916060626003135L;
+
     public final static GeometryFactory instance = new GeometryFactory();
 
     public final static Polygon createPolygon(final Coordinate[] coordinates)

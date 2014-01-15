@@ -3,6 +3,7 @@ package com.esri;
 import java.io.Serializable;
 
 /**
+ * Based on https://gist.github.com/jskorpan/1056060
  */
 public final class FastTok implements Serializable
 {

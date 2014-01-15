@@ -15,6 +15,8 @@ import java.io.Serializable;
  */
 public final class PreparedFeature implements Externalizable, Serializable
 {
+    private static final long serialVersionUID = 6983374750782055430L;
+
     public PreparedGeometry preparedGeometry;
     public int id;
 
