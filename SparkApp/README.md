@@ -1,7 +1,7 @@
 SparkApp
 ========
 
-Spark driver to spatially bin point data in an RDD using map reduce functions
+Spark driver to spatially bin point data in an RDD using map reduce functions.
 
 ## Data Setup
 
@@ -79,4 +79,3 @@ Note that a flatMap was used rather than a map as flatMap can return an empty li
 I should have used an Accumulator to tally the number of bad records.
 Onto the `flatMap` result is applied a `reduceByKey` function that simply sums the `1s`.
 The result of the `reduceByKey` is `collected` into a list of tuple where the first element is the polygon id and the second element is the aggregated sum.
-
