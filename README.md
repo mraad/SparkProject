@@ -9,7 +9,9 @@ This project contains two modules, SparkApp and SparkToolbox.
 * [SparkToolbox](https://github.com/mraad/SparkProject/tree/master/SparkToolbox) is [geoprocessing](http://help.arcgis.com/en/arcgisdesktop/10.0/help/index.html#/What_is_geoprocessing/002s00000001000000/) toolbox extension to [ArcGIS for Desktop](http://www.esri.com/software/arcgis/arcgis-for-desktop) and has two tools, HexTool and SparkTool.
     * HexTool is a geoprocessing tool that generates a polygon features class where each polygon is shaped as [hexagon](http://en.wikipedia.org/wiki/Hexagon). When invoked, the tool prompts the user for the hexagon width in map units and based on the map viewing extent, it generates a honeycomb style set of polygons to fill the map.
     * SparkTool is yet another geoprocessing tool and is the Spark driver to execute the above SparkApp on a Spark cluster. When invoked, it prompts the user to supply the location of the spark cluster, the feature class that contains the bins and the HDFS location of the point data to bin.  The result is a table with two columns. The first column is the feature id of the bin and the second column is the total number of HDFS data points that are covered by the bin area.
-    
+
+![SparkToolShot](https://dl.dropboxusercontent.com/u/2193160/SparkToolShot.png "SparkToolShot")
+
 ## Building Spark
 I use the [Cloudera Distribution of Hadoop](http://www.cloudera.com/content/cloudera/en/products-and-services/cdh.html) for all my BigData Hadoop work, so I downloaded the [0.8.1- CDH4](http://spark.incubator.apache.org/downloads.html) tarball and uncompressed it onto a local shared drive. I placed it in a shared drive as I will need it for development and for local distribution on my local Hadoop cluster.
 
